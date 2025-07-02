@@ -403,13 +403,6 @@ st.subheader("Matching Results")
 st.dataframe(results_df[display_cols])
 
 if not results_df.empty:
-    custom_filename = st.text_input(
-        "Enter a name for the Excel file to download (no spaces or .xlsx needed):",
-        value="matching_results"
-    )
-    if not custom_filename.strip():
-        custom_filename = "matching_results"
-    download_filename = custom_filename.strip().replace(" ", "_") + ".xlsx"
     results_excel = to_excel(results_df[display_cols])
     st.download_button(
         "Download Matching Results to Excel",
