@@ -65,6 +65,15 @@ appliance_file = st.file_uploader(
 if not appliance_file:
     st.stop()
 
+# Let user choose the Excel file name for download before running the slow match logic
+custom_filename = st.text_input(
+    "Enter a name for the Excel file to download (no spaces or .xlsx needed):",
+    value="matching_results"
+)
+if not custom_filename.strip():
+    custom_filename = "matching_results"
+download_filename = custom_filename.strip().replace(" ", "_") + ".xlsx"
+
 all_sheets = pd.read_excel(appliance_file, sheet_name=None)
 sheet_lookup = {}
 required = ['SKU', 'Brand', 'Model Status', 'Configuration']
