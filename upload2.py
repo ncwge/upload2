@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-st.title("Bulk SKU Similarity Finder (Structured + Text)")
+st.title("upload2")
 
 st.header("Step 1: Enter Competitor SKUs")
 uploaded_file = st.file_uploader("Upload Excel file with SKUs", type=["xlsx", "xls"])
@@ -352,6 +352,7 @@ for sku in skus:
         key_missing = any(pd.isnull(candidate.get(k, None)) or pd.isnull(target.get(k, None)) for k in features)
         penalty = missing_key_penalty if key_missing else 0
         combined_score = (0.92 * structured_sim + 0.08 * tfidf_sim) - penalty
+            })
 
         if combined_score > best_score:
             best_score = combined_score
@@ -386,10 +387,17 @@ st.subheader("Matching Results")
 st.dataframe(results_df[display_cols])
 
 if not results_df.empty:
+    custom_filename = st.text_input(
+        "Enter a name for the Excel file to download (no spaces or .xlsx needed):",
+        value="matching_results"
+    )
+    if not custom_filename.strip():
+        custom_filename = "matching_results"
+    download_filename = custom_filename.strip().replace(" ", "_") + ".xlsx"
     results_excel = to_excel(results_df[display_cols])
     st.download_button(
         "Download Matching Results to Excel",
         data=results_excel,
-        file_name="matching_results.xlsx",
+        file_name=download_filename,
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
